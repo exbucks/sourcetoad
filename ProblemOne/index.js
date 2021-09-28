@@ -80,6 +80,11 @@ function mutateArray(a) {
   a = converter(a, 1);
   a = converter(a, 2);
   a = a.filter(b => b.hasOwnProperty('guest_type') && b.guest_type === 'guest');
+  a.sort(function (a, b) {
+    sa = a.last_name.toUpperCase() + a.first_name.toUpperCase();
+    sb = b.last_name.toUpperCase() + a.first_name.toUpperCase();
+    return sa < sb ? -1 : sa > sb ? 1 : 0;
+  })
   return a;
 }
 
