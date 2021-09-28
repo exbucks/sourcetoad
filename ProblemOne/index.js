@@ -56,10 +56,22 @@ var arr = [
 ];
 
 function mutateArray(a) {
-    return a;
+  a = a.map(b =>
+    Object.assign(
+      {},
+      ...function _flatten(o) {
+        return [].concat(
+          ...Object.keys(o).map(k =>
+            typeof o[k] === 'object' && !$.isArray(o[k]) ? _flatten(o[k]) : ({[k]: o[k]})
+          )
+        );
+      }(b)
+    )
+  )
+  return a;
 }
 
 $(document).ready(function() {
-    $('#originalArray').html(JSON.stringify(arr, null, 2));
-    $('#resultsArray').html(JSON.stringify(mutateArray(arr), null, 2));
+  $('#originalArray').html(JSON.stringify(arr, null, 2));
+  $('#resultsArray').html(JSON.stringify(mutateArray(arr), null, 2));
 });
