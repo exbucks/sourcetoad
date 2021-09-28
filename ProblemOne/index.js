@@ -55,19 +55,30 @@ var arr = [
   },
 ];
 
-function mutateArray(a) {
-  a = a.map(b =>
+function converter(a, step) {
+  return a.map(b =>
     Object.assign(
       {},
       ...function _flatten(o) {
         return [].concat(
-          ...Object.keys(o).map(k =>
-            typeof o[k] === 'object' && !$.isArray(o[k]) ? _flatten(o[k]) : ({[k]: o[k]})
-          )
+          ...Object.keys(o).map(k => {
+            switch (step) {
+              case 1:
+                return typeof o[k] === 'object' && !$.isArray(o[k]) ? _flatten(o[k]) : ({[k]: o[k]});
+              case 2:
+                return $.isArray(o[k]) ? ({[k]: o[k].reduce((a, b) => a + b, 0)}) : ({[k]: o[k]});
+              default:
+            }
+          })
         );
       }(b)
     )
-  )
+  );
+}
+
+function mutateArray(a) {
+  a = converter(a, 1);
+  a = converter(a, 2);
   return a;
 }
 
